@@ -1,0 +1,5 @@
+Discount_Bucket,Avg_Sales,Avg_Profit,Avg_Margin,Count
+High (>35%),2898.02,-445.36,-16.19,2538
+Low (≤15%),4780.79,559.37,11.75,1253
+Medium (16–35%),3880.13,-4.97,-0.19,2471
+No Discount,5322.19,1068.02,19.93,3738

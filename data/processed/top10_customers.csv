@@ -1,0 +1,11 @@
+Customer_ID,Customer_Name,Segment,Total_Sales,Total_Profit,Order_Count,Is_Repeat
+CUST-0215,Richard Thomas,Corporate,212698.44,26366.38,28,1
+CUST-0132,James Martin,Corporate,185860.27000000002,8914.85,28,1
+CUST-0121,Michael Harris,Home Office,181588.24,24031.79,25,1
+CUST-0330,Jessica Miller,Consumer,175492.31,22771.0,26,1
+CUST-0097,John Smith,Corporate,172815.1,25468.75,30,1
+CUST-0037,Linda Smith,Home Office,168023.13,13980.14,24,1
+CUST-0352,William Williams,Home Office,167143.69,966.3699999999999,27,1
+CUST-0164,James Moore,Consumer,164392.38,23065.23,26,1
+CUST-0328,Richard Anderson,Corporate,163817.15,15796.78,24,1
+CUST-0228,Michael Wilson,Home Office,163709.81,20102.489999999998,25,1

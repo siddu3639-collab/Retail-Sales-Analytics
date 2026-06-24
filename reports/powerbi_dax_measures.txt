@@ -1,0 +1,149 @@
+# Power BI DAX Measures — Retail Sales Dashboard
+# Paste each measure into Power BI > New Measure
+
+# ═══════════════════════════════════════════════
+# PAGE 1: EXECUTIVE OVERVIEW
+# ═══════════════════════════════════════════════
+
+Total Sales =
+SUM(Orders[Sales])
+
+Total Profit =
+SUM(Orders[Profit])
+
+Total Orders =
+DISTINCTCOUNT(Orders[Order_ID])
+
+Profit Margin % =
+DIVIDE(
+    SUM(Orders[Profit]),
+    SUM(Orders[Sales]),
+    0
+) * 100
+
+Average Order Value =
+DIVIDE(
+    SUM(Orders[Sales]),
+    DISTINCTCOUNT(Orders[Order_ID]),
+    0
+)
+
+Total Units Sold =
+SUM(Orders[Quantity])
+
+# ═══════════════════════════════════════════════
+# PAGE 2: CUSTOMER ANALYTICS
+# ═══════════════════════════════════════════════
+
+Total Customers =
+DISTINCTCOUNT(Orders[Customer_ID])
+
+Repeat Customers =
+CALCULATE(
+    DISTINCTCOUNT(Orders[Customer_ID]),
+    FILTER(
+        VALUES(Orders[Customer_ID]),
+        CALCULATE(DISTINCTCOUNT(Orders[Order_ID])) > 1
+    )
+)
+
+Repeat Customer Rate % =
+DIVIDE([Repeat Customers], [Total Customers], 0) * 100
+
+Customer Lifetime Value =
+DIVIDE(
+    SUM(Orders[Sales]),
+    DISTINCTCOUNT(Orders[Customer_ID]),
+    0
+)
+
+Avg Purchase Frequency =
+DIVIDE(
+    DISTINCTCOUNT(Orders[Order_ID]),
+    DISTINCTCOUNT(Orders[Customer_ID]),
+    0
+)
+
+# ═══════════════════════════════════════════════
+# PAGE 3: PRODUCT ANALYTICS
+# ═══════════════════════════════════════════════
+
+Average Discount % =
+AVERAGE(Orders[Discount]) * 100
+
+Total Shipping Cost =
+SUM(Orders[Shipping_Cost])
+
+Revenue After Shipping =
+SUM(Orders[Sales]) - SUM(Orders[Shipping_Cost])
+
+Loss Orders Count =
+CALCULATE(
+    COUNT(Orders[Order_ID]),
+    Orders[Profit] < 0
+)
+
+Profitable Orders % =
+DIVIDE(
+    CALCULATE(COUNT(Orders[Order_ID]), Orders[Profit] >= 0),
+    COUNT(Orders[Order_ID]),
+    0
+) * 100
+
+# ═══════════════════════════════════════════════
+# PAGE 4: SALES FORECASTING / TIME INTELLIGENCE
+# ═══════════════════════════════════════════════
+
+# Requires a Date table named 'DateTable' with column 'Date'
+# Create it in Power BI: Modeling > New Table
+# DateTable = CALENDAR(DATE(2021,1,1), DATE(2024,12,31))
+
+Sales Last Month =
+CALCULATE(
+    [Total Sales],
+    DATEADD(DateTable[Date], -1, MONTH)
+)
+
+Sales Last Year =
+CALCULATE(
+    [Total Sales],
+    SAMEPERIODLASTYEAR(DateTable[Date])
+)
+
+MoM Sales Growth % =
+DIVIDE(
+    [Total Sales] - [Sales Last Month],
+    [Sales Last Month],
+    0
+) * 100
+
+YoY Sales Growth % =
+DIVIDE(
+    [Total Sales] - [Sales Last Year],
+    [Sales Last Year],
+    0
+) * 100
+
+YTD Sales =
+TOTALYTD([Total Sales], DateTable[Date])
+
+QTD Sales =
+TOTALQTD([Total Sales], DateTable[Date])
+
+Rolling 3M Sales =
+CALCULATE(
+    [Total Sales],
+    DATESINPERIOD(DateTable[Date], LASTDATE(DateTable[Date]), -3, MONTH)
+)
+
+# ═══════════════════════════════════════════════
+# CONDITIONAL FORMATTING MEASURES
+# ═══════════════════════════════════════════════
+
+Profit Margin Color =
+IF([Profit Margin %] >= 20, "Green",
+   IF([Profit Margin %] >= 10, "Orange", "Red"))
+
+Growth Arrow =
+IF([YoY Sales Growth %] >= 0, "▲ " & FORMAT([YoY Sales Growth %], "0.0") & "%",
+                               "▼ " & FORMAT(ABS([YoY Sales Growth %]), "0.0") & "%")
