@@ -1,11 +1,3 @@
--- ============================================================
--- business_queries.sql
--- Answers key business questions for the retail dashboard
--- ============================================================
-
-
--- ── 1. EXECUTIVE OVERVIEW ─────────────────────────────────
--- Total sales, profit, orders, margin
 SELECT
     ROUND(SUM(o.sales), 2)                               AS total_sales,
     ROUND(SUM(o.profit), 2)                              AS total_profit,
@@ -14,8 +6,6 @@ SELECT
     ROUND(AVG(o.sales), 2)                               AS avg_order_value
 FROM Orders o;
 
-
--- ── 2. MONTHLY SALES TREND ────────────────────────────────
 SELECT
     YEAR(order_date)                  AS year,
     MONTH(order_date)                 AS month,
@@ -37,7 +27,7 @@ ORDER BY year, month;
 -- GROUP BY 1, 2 ORDER BY 1, 2;
 
 
--- ── 3. REGIONAL PERFORMANCE ───────────────────────────────
+-- ── 3. REGIONAL PERFORMANCE 
 SELECT
     c.region,
     ROUND(SUM(o.sales), 2)                               AS total_sales,
@@ -50,7 +40,7 @@ GROUP BY c.region
 ORDER BY total_sales DESC;
 
 
--- ── 4. TOP 10 CUSTOMERS BY REVENUE ───────────────────────
+-- ── 4. TOP 10 CUSTOMERS BY REVENUE 
 SELECT
     c.customer_id,
     c.customer_name,
@@ -66,7 +56,7 @@ ORDER BY total_spent DESC
 LIMIT 10;
 
 
--- ── 5. TOP 10 MOST PROFITABLE PRODUCTS ───────────────────
+-- ── 5. TOP 10 MOST PROFITABLE PRODUCTS 
 SELECT
     p.product_id,
     p.product_name,
@@ -82,7 +72,7 @@ ORDER BY total_profit DESC
 LIMIT 10;
 
 
--- ── 6. CATEGORY vs SUB-CATEGORY BREAKDOWN ────────────────
+-- ── 6. CATEGORY vs SUB-CATEGORY BREAKDOWN 
 SELECT
     p.category,
     p.sub_category,
@@ -96,7 +86,7 @@ GROUP BY p.category, p.sub_category
 ORDER BY total_sales DESC;
 
 
--- ── 7. CUSTOMER SEGMENT ANALYSIS ─────────────────────────
+-- ── 7. CUSTOMER SEGMENT ANALYSIS 
 SELECT
     c.segment,
     COUNT(DISTINCT c.customer_id)  AS customer_count,
@@ -109,7 +99,7 @@ GROUP BY c.segment
 ORDER BY total_sales DESC;
 
 
--- ── 8. DISCOUNT IMPACT ON PROFIT ─────────────────────────
+-- ── 8. DISCOUNT IMPACT ON PROFIT 
 SELECT
     CASE
         WHEN discount = 0            THEN 'No Discount'
@@ -126,7 +116,7 @@ GROUP BY discount_bucket
 ORDER BY avg_margin_pct DESC;
 
 
--- ── 9. TOP 5 STATES BY SALES ──────────────────────────────
+-- ── 9. TOP 5 STATES BY SALES 
 SELECT
     c.state,
     c.region,
@@ -140,7 +130,7 @@ ORDER BY total_sales DESC
 LIMIT 5;
 
 
--- ── 10. REPEAT CUSTOMERS ──────────────────────────────────
+-- ── 10. REPEAT CUSTOMERS 
 SELECT
     total_customers,
     repeat_customers,
@@ -157,7 +147,7 @@ FROM (
 ) summary;
 
 
--- ── 11. PAYMENT MODE ANALYSIS ─────────────────────────────
+-- ── 11. PAYMENT MODE ANALYSIS 
 SELECT
     payment_mode,
     COUNT(*)                  AS transactions,
@@ -168,7 +158,7 @@ GROUP BY payment_mode
 ORDER BY transactions DESC;
 
 
--- ── 12. YoY SALES GROWTH (MySQL) ─────────────────────────
+-- ── 12. YoY SALES GROWTH (MySQL)
 SELECT
     curr.year,
     curr.total_sales,

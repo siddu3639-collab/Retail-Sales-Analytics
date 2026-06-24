@@ -1,10 +1,3 @@
--- ============================================================
--- schema.sql
--- Creates the Retail Sales database schema
--- Compatible with MySQL 8+ and PostgreSQL 13+
--- ============================================================
-
--- ── Customers ──────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS Customers (
     customer_id   VARCHAR(20)  PRIMARY KEY,
     customer_name VARCHAR(100) NOT NULL,
@@ -13,7 +6,7 @@ CREATE TABLE IF NOT EXISTS Customers (
     state         VARCHAR(50)
 );
 
--- ── Products ───────────────────────────────────────────────
+-- ── Products 
 CREATE TABLE IF NOT EXISTS Products (
     product_id   VARCHAR(20)  PRIMARY KEY,
     category     VARCHAR(50),
@@ -21,7 +14,7 @@ CREATE TABLE IF NOT EXISTS Products (
     product_name VARCHAR(200)
 );
 
--- ── Orders ────────────────────────────────────────────────
+-- ── Orders 
 CREATE TABLE IF NOT EXISTS Orders (
     order_id      VARCHAR(20) PRIMARY KEY,
     order_date    DATE        NOT NULL,
@@ -38,7 +31,7 @@ CREATE TABLE IF NOT EXISTS Orders (
     FOREIGN KEY (product_id)  REFERENCES Products(product_id)
 );
 
--- ── Indexes for query performance ─────────────────────────
+-- ── Indexes for query performance 
 CREATE INDEX IF NOT EXISTS idx_orders_date        ON Orders(order_date);
 CREATE INDEX IF NOT EXISTS idx_orders_customer    ON Orders(customer_id);
 CREATE INDEX IF NOT EXISTS idx_orders_product     ON Orders(product_id);

@@ -1,15 +1,3 @@
-"""
-forecasting.py
---------------
-Builds a simple but effective sales forecast using:
-  - 3-month moving average
-  - Linear trend extrapolation (12-month forecast horizon)
-
-Exports forecast_results.csv and prints accuracy metrics.
-
-Run:  python python/forecasting.py
-"""
-
 import pandas as pd
 import numpy as np
 from datetime import datetime
@@ -20,7 +8,6 @@ PROCESSED_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "
 os.makedirs(PROCESSED_DIR, exist_ok=True)
 os.makedirs(os.path.dirname(CLEANED_PATH), exist_ok=True)
 
-# ── Load & aggregate monthly ───────────────────────────────────────────────────
 df = pd.read_csv(CLEANED_PATH, parse_dates=["Order_Date"])
 monthly = (
     df.groupby(df["Order_Date"].dt.to_period("M"))
@@ -30,12 +17,10 @@ monthly = (
 monthly["Order_Date"] = monthly["Order_Date"].dt.to_timestamp()
 monthly = monthly.sort_values("Order_Date").reset_index(drop=True)
 
-# ── Moving averages ────────────────────────────────────────────────────────────
 monthly["MA_3"]  = monthly["Sales"].rolling(window=3).mean().round(2)
 monthly["MA_6"]  = monthly["Sales"].rolling(window=6).mean().round(2)
 monthly["MA_12"] = monthly["Sales"].rolling(window=12).mean().round(2)
 
-# ── Linear trend forecast ──────────────────────────────────────────────────────
 x = np.arange(len(monthly))
 y = monthly["Sales"].values
 
@@ -82,7 +67,6 @@ historical_df["Forecast_Sales_Adj"] = np.nan
 full_df = pd.concat([historical_df, forecast_df], ignore_index=True)
 full_df.to_csv(f"{PROCESSED_DIR}/forecast_results.csv", index=False)
 
-# ── Accuracy (MAE on last 3 months hold-out) ───────────────────────────────────
 hold_out = monthly.tail(3)
 hold_x   = np.arange(len(monthly) - 3, len(monthly))
 hold_pred = slope * hold_x + intercept
