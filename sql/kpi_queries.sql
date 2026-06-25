@@ -1,11 +1,3 @@
--- ============================================================
--- kpi_queries.sql
--- Standalone KPI queries — paste directly into Power BI
--- "DirectQuery" SQL or use as stored views
--- ============================================================
-
-
--- ── VIEW 1: Monthly KPI Summary ───────────────────────────
 CREATE OR REPLACE VIEW vw_monthly_kpi AS
 SELECT
     YEAR(o.order_date)        AS year,
@@ -19,7 +11,7 @@ FROM Orders o
 GROUP BY YEAR(o.order_date), MONTH(o.order_date);
 
 
--- ── VIEW 2: Product Performance ──────────────────────────
+-- ── VIEW 2: Product Performance
 CREATE OR REPLACE VIEW vw_product_performance AS
 SELECT
     p.product_id,
@@ -36,7 +28,7 @@ JOIN Products p ON o.product_id = p.product_id
 GROUP BY p.product_id, p.product_name, p.category, p.sub_category;
 
 
--- ── VIEW 3: Customer 360 ─────────────────────────────────
+-- ── VIEW 3: Customer 360 
 CREATE OR REPLACE VIEW vw_customer_360 AS
 SELECT
     c.customer_id,
@@ -56,7 +48,7 @@ JOIN Customers c ON o.customer_id = c.customer_id
 GROUP BY c.customer_id, c.customer_name, c.segment, c.region, c.state;
 
 
--- ── VIEW 4: Regional KPI ─────────────────────────────────
+-- ── VIEW 4: Regional KPI 
 CREATE OR REPLACE VIEW vw_regional_kpi AS
 SELECT
     c.region,
